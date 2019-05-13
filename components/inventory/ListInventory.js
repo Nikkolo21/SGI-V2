@@ -31,6 +31,7 @@ export default class ListInventory extends Component {
     }
 
     render() {
+        const { navigate } = this.props.navigation;
         const { type, category, types, categories, inventoryList } = this.state;
         return (
             <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'rgba(10, 10, 10, 0.05)' }}>
@@ -62,15 +63,15 @@ export default class ListInventory extends Component {
                 </View>
                 {
                     inventoryList.map((elem, index) => (
-                        <View key={index} style={{ padding: 10 }}>
-                            <View style={{ backgroundColor: 'white', padding: 5 }}>
-                                <Text> Nombre: {elem.nombre} </Text>
-                                <Text> Estado: {elem.status ? 'Activo' : 'Inactivo'} </Text>
-                                <Text> Código Interno: {elem.codigo_interno} </Text>
-                                <Text> Descripción: {elem.descripcion} </Text>
-                                <Text> Categoría: {elem.categoria} </Text>
+                        <TouchableOpacity key={index} onPress={() => navigate('Show', elem)}>
+                            <View style={{ padding: 10 }}>
+                                <View style={{ backgroundColor: 'white', padding: 15 }}>
+                                    <Text> <Text style={{ fontWeight: 'bold' }}> Nombre: </Text> {elem.nombre} </Text>
+                                    <Text> <Text style={{ fontWeight: 'bold' }}> Estado: </Text> {elem.status ? 'Activo' : 'Inactivo'} </Text>
+                                    <Text> <Text style={{ fontWeight: 'bold' }}> Código Interno: </Text> {elem.codigo_interno} </Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     ))
                 }
             </ScrollView>

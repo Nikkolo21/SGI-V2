@@ -4,6 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import LoginForm from '../components/Login/LoginForm';
 import ForgotPasswordForm from '../components/Login/ForgotPasswordForm';
 import ListInventory from '../components/inventory/ListInventory';
+import ShowInventory from '../components/inventory/ShowInventory';
 
 export const ForgotPasswordStack = createStackNavigator({
   Forgot: ForgotPasswordForm
@@ -13,12 +14,12 @@ export const LoginStack = createStackNavigator({
   Login: LoginForm
 });
 
-export const ListInventoryStack = createStackNavigator({
-  List: ListInventory
-});
+export const AppStack = createStackNavigator({
+  List: ListInventory,
+  Show: ShowInventory,
+}, { initialRouteKey: 'List', initialRouteName: 'List' });
 
 export default createBottomTabNavigator({
-  ListInventoryStack,
-  LoginStack,
+  AppStack,
   ForgotPasswordStack,
 });
