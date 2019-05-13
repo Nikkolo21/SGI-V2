@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { View, Text, Image, Button, TouchableOpacity, Picker } from "react-native";
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -22,20 +22,86 @@ export default class ShowInventory extends Component {
                     <TouchableOpacity onPress={() => navigate('List')}>
                         <Text style={{ fontWeight: 'bold', fontSize: 12 }}> Atrás</Text>
 
-                        <Text style={{ fontSize: 14, marginTop: 20 }}><Text style={{ fontWeight: 'bold' }}>Tipo de inventario:</Text> {state.params.tipo}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Categoría:</Text> {state.params.categoria}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Descripción:</Text> {state.params.descripcion}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Código interno:</Text> {state.params.codigo_interno}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Estado:</Text> {state.params.status ? 'Activo' : 'Inactivo'}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}># Activo:</Text> {state.params.numero_activo}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Mínimo de existencia:</Text> {state.params.minimo_existencia}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Laboratorio asociado:</Text> {state.params.id_laboratorio}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Usuario creador:</Text> {state.params.id_usuario_creador}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Formula química:</Text> {state.params.atributos_extra[0].valor}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Presentación:</Text> {state.params.atributos_extra[1].valor}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Solicitante habitual:</Text> {state.params.atributos_extra[2].valor}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Unidad de medición:</Text> {state.params.atributos_extra[3].valor}</Text>
-                        <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>Proveedor principal:</Text> {state.params.atributos_extra[4].valor}</Text>
+                        {
+                            [
+                                {
+                                    label: 'Tipo de inventario:',
+                                    value: state.params.tipo,
+                                    show: state.params.tipo,
+                                },
+                                {
+                                    label: 'Categoría:',
+                                    value: state.params.categoria,
+                                    show: state.params.categoria,
+                                },
+                                {
+                                    label: 'Descripción:',
+                                    value: state.params.descripcion,
+                                    show: state.params.descripcion,
+                                },
+                                {
+                                    label: 'Código interno:',
+                                    value: state.params.codigo_interno,
+                                    show: state.params.codigo_interno,
+                                },
+                                {
+                                    label: 'Estado:',
+                                    value: state.params.status ? 'Activo' : 'Inactivo',
+                                    show: true,
+                                },
+                                {
+                                    label: '# Activo:',
+                                    value: state.params.numero_activo,
+                                    show: state.params.numero_activo,
+                                },
+                                {
+                                    label: 'Mínimo de existencia:',
+                                    value: state.params.minimo_existencia,
+                                    show: state.params.minimo_existencia,
+                                },
+                                {
+                                    label: 'Laboratorio asociado:',
+                                    value: state.params.id_laboratorio,
+                                    show: state.params.id_laboratorio,
+                                },
+                                {
+                                    label: 'Usuario creador:',
+                                    value: state.params.id_usuario_creador,
+                                    show: state.params.id_usuario_creador,
+                                },
+                                {
+                                    label: 'Formula química:',
+                                    value: state.params.atributos_extra[0].valor,
+                                    show: state.params.atributos_extra && state.params.atributos_extra[0],
+                                },
+                                {
+                                    label: 'Presentación:',
+                                    value: state.params.atributos_extra[1].valor,
+                                    show: state.params.atributos_extra && state.params.atributos_extra[1],
+                                },
+                                {
+                                    label: 'Solicitante habitual:',
+                                    value: state.params.atributos_extra[2].valor,
+                                    show: state.params.atributos_extra && state.params.atributos_extra[2],
+                                },
+                                {
+                                    label: 'Unidad de medición:',
+                                    value: state.params.atributos_extra[3].valor,
+                                    show: state.params.atributos_extra && state.params.atributos_extra[3],
+                                },
+                                {
+                                    label: 'Proveedor pricipal:',
+                                    value: state.params.atributos_extra[4].valor,
+                                    show: state.params.atributos_extra && state.params.atributos_extra[4],
+                                },
+                            ].map((elem, index) => (
+                                <Fragment key={index}>
+                                    {
+                                        elem.show && <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>{elem.label}</Text> {elem.value}</Text>
+                                    }
+                                </Fragment>
+                            ))
+                        }
                     </TouchableOpacity>
                 </View>
             </ScrollView>
