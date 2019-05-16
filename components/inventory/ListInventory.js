@@ -22,7 +22,7 @@ export default class ListInventory extends Component {
 
     componentDidMount() {
         Inventory.types(response => this.setState({ types: response.data || [], type: response.data[0] }), error => console.log(error));
-        Inventory.list(" ", response => this.setState({ inventoryList: response }), error => console.log(error));
+        Inventory.list("a", response => this.setState({ inventoryList: response }), error => console.log(error));
     }
 
     getCategories = (type) => {

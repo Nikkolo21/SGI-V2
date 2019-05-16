@@ -69,31 +69,11 @@ export default class ShowInventory extends Component {
                                     value: state.params.id_usuario_creador,
                                     show: state.params.id_usuario_creador,
                                 },
-                                {
-                                    label: 'Formula química:',
-                                    value: state.params.atributos_extra[0].valor,
-                                    show: state.params.atributos_extra && state.params.atributos_extra[0],
-                                },
-                                {
-                                    label: 'Presentación:',
-                                    value: state.params.atributos_extra[1].valor,
-                                    show: state.params.atributos_extra && state.params.atributos_extra[1],
-                                },
-                                {
-                                    label: 'Solicitante habitual:',
-                                    value: state.params.atributos_extra[2].valor,
-                                    show: state.params.atributos_extra && state.params.atributos_extra[2],
-                                },
-                                {
-                                    label: 'Unidad de medición:',
-                                    value: state.params.atributos_extra[3].valor,
-                                    show: state.params.atributos_extra && state.params.atributos_extra[3],
-                                },
-                                {
-                                    label: 'Proveedor pricipal:',
-                                    value: state.params.atributos_extra[4].valor,
-                                    show: state.params.atributos_extra && state.params.atributos_extra[4],
-                                },
+                                ...state.params.atributos_extra.map(elem => ({
+                                    label: elem.nombre,
+                                    value: elem.valor,
+                                    show: elem.importante // show flag
+                                }))
                             ].map((elem, index) => (
                                 <Fragment key={index}>
                                     {
@@ -101,6 +81,7 @@ export default class ShowInventory extends Component {
                                     }
                                 </Fragment>
                             ))
+
                         }
                     </TouchableOpacity>
                 </View>
