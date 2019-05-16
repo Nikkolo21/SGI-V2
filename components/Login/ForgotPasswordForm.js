@@ -33,26 +33,16 @@ export default class ForgotPasswordForm extends Component {
     }
 
     onButtonPress = async () => {
-        const { email, password } = this.state;
+        const { email } = this.state;
         this.setState({ loading: true });
-        fetch('https://sgi-user-service.herokuapp.com/usuario/login', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "email": email,
-                "password": password,
-                "userType": "mgmt",
-            })
-        }).then(response => response.json())
-            .then(response => {
+        Auth.sendEmailCode(email,
+            response => {
                 this.setState(response.httpStatus === 200 ? { error: false } : { error: response.error || response.data })
                 console.log(response);
                 this.setState({ loading: false });
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({ loading: false });
-            });
+            },
+            error => console.log(error)
+        )
     }
     renderError = () => {
         if (this.state.error) {
