@@ -11,16 +11,16 @@ export default class ShowInventory extends Component {
     render() {
         const { navigate, state } = this.props.navigation;
         return (
-            <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'rgba(10, 10, 10, 0.05)', padding: 20 }}>
-                <Text style={{ fontSize: 20, paddingHorizontal: 10, paddingVertical: 10 }}>
+            <ScrollView style={style.mainView}>
+                <Text style={style.title}>
                     Inventarios
                 </Text>
-                <Text style={{ fontSize: 16, paddingHorizontal: 10, paddingVertical: 10 }}>
+                <Text style={style.subtitle}>
                     {state.params.nombre}
                 </Text>
-                <View style={{ padding: 20, backgroundColor: 'white' }}>
+                <View style={style.mainBox}>
                     <TouchableOpacity onPress={() => navigate('List')}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 12 }}> Atrás</Text>
+                        <Text style={style.backLink}> Atrás</Text>
 
                         {
                             [
@@ -77,7 +77,7 @@ export default class ShowInventory extends Component {
                             ].map((elem, index) => (
                                 <Fragment key={index}>
                                     {
-                                        elem.show && <Text style={{ fontSize: 14 }}><Text style={{ fontWeight: 'bold' }}>{elem.label}</Text> {elem.value}</Text>
+                                        elem.show && <Text style={style.elemText}><Text style={style.elemBoldText}>{elem.label}</Text> {elem.value}</Text>
                                     }
                                 </Fragment>
                             ))
@@ -88,4 +88,38 @@ export default class ShowInventory extends Component {
             </ScrollView>
         )
     }
+}
+
+
+const style = {
+    mainView: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: 'rgba(10, 10, 10, 0.05)',
+        padding: 20
+    },
+    title: {
+        fontSize: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 10
+    },
+    subtitle: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 10
+    },
+    mainBox: {
+        padding: 20,
+        backgroundColor: 'white'
+    },
+    backLink: {
+        fontWeight: 'bold',
+        fontSize: 12
+    },
+    elemText: {
+        fontSize: 14
+    },
+    elemBoldText: {
+        fontWeight: 'bold'
+    },
 }

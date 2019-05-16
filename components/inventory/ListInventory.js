@@ -20,9 +20,9 @@ export default class ListInventory extends Component {
         header: null,
     };
 
-    componentDidMount() {
-        Inventory.types(response => this.setState({ types: response.data || [], type: response.data[0] }), error => console.log(error));
-        Inventory.list("a", response => this.setState({ inventoryList: response }), error => console.log(error));
+    async componentDidMount() {
+        await Inventory.types(response => this.setState({ types: response.data || [], type: response.data[0] }), error => console.log(error));
+        await Inventory.list("a", response => this.setState({ inventoryList: response }), error => console.log(error));
     }
 
     getCategories = (type) => {
@@ -34,14 +34,14 @@ export default class ListInventory extends Component {
         const { navigate } = this.props.navigation;
         const { type, category, types, categories, inventoryList } = this.state;
         return (
-            <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'rgba(10, 10, 10, 0.05)' }}>
-                <Text style={{ fontSize: 20, paddingHorizontal: 10, paddingVertical: 20 }}>
+            <ScrollView style={style.mainView}>
+                <Text style={style.title}>
                     Inventarios
                 </Text>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={style.mainBox}>
                     <Picker
                         selectedValue={type}
-                        style={{ height: 50, width: 150 }}
+                        style={style.picker}
                         onValueChange={(itemValue, itemIndex) => this.getCategories(itemValue)
                         }>
                         {
@@ -52,7 +52,7 @@ export default class ListInventory extends Component {
                         categories &&
                         <Picker
                             selectedValue={category}
-                            style={{ height: 50, width: 150 }}
+                            style={style.picker}
                             onValueChange={(itemValue, itemIndex) => this.setState({ category: itemValue })
                             }>
                             {
@@ -64,11 +64,11 @@ export default class ListInventory extends Component {
                 {
                     inventoryList.map((elem, index) => (
                         <TouchableOpacity key={index} onPress={() => navigate('Show', elem)}>
-                            <View style={{ padding: 10 }}>
-                                <View style={{ backgroundColor: 'white', padding: 15 }}>
-                                    <Text> <Text style={{ fontWeight: 'bold' }}> Nombre: </Text> {elem.nombre} </Text>
-                                    <Text> <Text style={{ fontWeight: 'bold' }}> Estado: </Text> {elem.status ? 'Activo' : 'Inactivo'} </Text>
-                                    <Text> <Text style={{ fontWeight: 'bold' }}> Código Interno: </Text> {elem.codigo_interno} </Text>
+                            <View style={style.inventoryBox}>
+                                <View style={style.inventoryElement}>
+                                    <Text> <Text style={style.textBold}> Nombre: </Text> {elem.nombre} </Text>
+                                    <Text> <Text style={style.textBold}> Estado: </Text> {elem.status ? 'Activo' : 'Inactivo'} </Text>
+                                    <Text> <Text style={style.textBold}> Código Interno: </Text> {elem.codigo_interno} </Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -77,4 +77,34 @@ export default class ListInventory extends Component {
             </ScrollView>
         )
     }
+}
+
+const style = {
+    mainView: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: 'rgba(10, 10, 10, 0.05)'
+    },
+    mainBox: {
+        flexDirection: 'row'
+    },
+    title: {
+        fontSize: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 20
+    },
+    textBold: {
+        fontWeight: 'bold'
+    },
+    inventoryElement: {
+        backgroundColor: 'white',
+        padding: 15
+    },
+    inventoryBox: {
+        padding: 10
+    },
+    picker: {
+        height: 50,
+        width: 150
+    },
 }
