@@ -27,6 +27,32 @@ const Inventory = {
         }).then(response => response.json())
             .then(thenFn)
             .catch(catchFn);
+    },
+    inventoryIn: (id, from = '', until = '', thenFn, catchFn) => {
+        fetch(`${BASE_URI}/entrada/buscar`, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "inventario": id,
+                "fecha_inicio": from,
+                "fecha_fin": until,
+            })
+        }).then(response => response.json())
+            .then(thenFn)
+            .catch(catchFn);
+    },
+    inventoryOut: (id, from = '', until = '', thenFn, catchFn) => {
+        fetch(`${BASE_URI}/salida/buscar`, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "inventario": id,
+                "fecha_inicio": from,
+                "fecha_fin": until,
+            })
+        }).then(response => response.json())
+            .then(thenFn)
+            .catch(catchFn);
     }
 };
 

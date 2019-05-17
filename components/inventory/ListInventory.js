@@ -83,15 +83,14 @@ const style = {
     mainView: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: 'rgba(10, 10, 10, 0.05)'
+        backgroundColor: 'rgba(10, 10, 10, 0.05)',
     },
     mainBox: {
         flexDirection: 'row'
     },
     title: {
         fontSize: 20,
-        paddingHorizontal: 10,
-        paddingVertical: 20
+        padding: 20,
     },
     textBold: {
         fontWeight: 'bold'

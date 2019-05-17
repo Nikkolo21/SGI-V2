@@ -1,15 +1,34 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text, Image, Button, TouchableOpacity, Picker } from "react-native";
 import { ScrollView } from 'react-native-gesture-handler';
+import Inventory from '../../api/Inventory';
 
 export default class ShowInventory extends Component {
 
     static navigationOptions = {
         header: null,
+        from: '',
+        until: '',
     };
+
+    componentDidMount() {
+        this.getInventoryIn();
+        this.getInventoryOut();
+    }
+
+    getInventoryOut = () => {
+        const { state, from, until } = this.props.navigation;
+        Inventory.inventoryOut(state.params._id, from, until, response => console.log(response), error => console.log(error));
+    }
+
+    getInventoryIn = () => {
+        const { state, from, until } = this.props.navigation;
+        Inventory.inventoryIn(state.params._id, from, until, response => console.log(response), error => console.log(error));
+    }
 
     render() {
         const { navigate, state } = this.props.navigation;
+        console.log(state.params);
         return (
             <ScrollView style={style.mainView}>
                 <Text style={style.title}>
@@ -24,6 +43,11 @@ export default class ShowInventory extends Component {
 
                         {
                             [
+                                {
+                                    label: 'Existencia actual:',
+                                    value: state.params.existencia,
+                                    show: true,
+                                },
                                 {
                                     label: 'Tipo de inventario:',
                                     value: state.params.tipo,
@@ -114,7 +138,8 @@ const style = {
     },
     backLink: {
         fontWeight: 'bold',
-        fontSize: 12
+        fontSize: 12,
+        paddingBottom: 10
     },
     elemText: {
         fontSize: 14
