@@ -5,9 +5,11 @@ import LoginForm from '../components/Login/LoginForm';
 import ForgotPasswordForm from '../components/Login/ForgotPasswordForm';
 import ListInventory from '../components/inventory/ListInventory';
 import ShowInventory from '../components/inventory/ShowInventory';
+import ChangePasswordForm from '../components/Login/ChangePasswordForm';
 
 export const ForgotPasswordStack = createStackNavigator({
-  Forgot: ForgotPasswordForm
+  Forgot: ForgotPasswordForm,
+  ChangePassword: ChangePasswordForm,
 });
 
 export const LoginStack = createStackNavigator({

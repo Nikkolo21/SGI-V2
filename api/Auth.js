@@ -15,6 +15,7 @@ const Auth = {
             .catch(catchFn);
     },
     sendEmailCode: (email, thenFn, catchFn) => {
+        console.log(email);
         fetch(`${BASE_URI}/usuario/password/sendemail`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
@@ -25,16 +26,14 @@ const Auth = {
             .then(thenFn)
             .catch(catchFn);
     },
-    recoverPassword: (data, thenFn, catchFn) => {
+    recoverPassword: (code, email, password, thenFn, catchFn) => {
         fetch(`${BASE_URI}/usuario/password/recover`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "newPassword": data.newPassword,
-                "repeatPassword": data.repeatPassword,
-                "requestType": "id",
-                "id": data.id
-
+                "codigoSeguridad": code,
+                "email": email,
+                "password": password,
             })
         }).then(response => response.json())
             .then(thenFn)

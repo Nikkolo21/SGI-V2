@@ -28,18 +28,19 @@ export default class ForgotPasswordForm extends Component {
         this.setState({ email, error: false });
     }
 
-    onPasswordChange = password => {
-        this.setState({ password, error: false });
-    }
-
     onButtonPress = async () => {
         const { email } = this.state;
         this.setState({ loading: true });
         Auth.sendEmailCode(email,
             response => {
-                this.setState(response.httpStatus === 200 ? { error: false } : { error: response.error || response.data })
-                console.log(response);
                 this.setState({ loading: false });
+                console.log(response);
+                if (response.httpStatus === 200) {
+                    this.setState({ error: false });
+                    this.props.navigation.navigate('ChangePassword');
+                } else {
+                    this.setState({ error: response.error || response.data });
+                }
             },
             error => console.log(error)
         )
