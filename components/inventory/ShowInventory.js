@@ -1,9 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text, Image, Button, TouchableOpacity, Picker } from "react-native";
-import { ScrollView } from 'react-native-gesture-handler';
+// import { ScrollView } from 'react-native-gesture-handler';
 import Inventory from '../../api/Inventory';
+import colors from "../../util/Colors";
 
 export default class ShowInventory extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            in_list: [],
+            out_list: [],
+            choosed: 'entrada',
+        }
+    }
 
     static navigationOptions = {
         header: null,
@@ -18,19 +27,25 @@ export default class ShowInventory extends Component {
 
     getInventoryOut = () => {
         const { state, from, until } = this.props.navigation;
-        Inventory.inventoryOut(state.params._id, from, until, response => console.log(response), error => console.log(error));
+        Inventory.inventoryOut(state.params._id, from, until, response => this.setState({ out_list: response.salidas }), error => console.log(error));
     }
 
     getInventoryIn = () => {
         const { state, from, until } = this.props.navigation;
-        Inventory.inventoryIn(state.params._id, from, until, response => console.log(response), error => console.log(error));
+        Inventory.inventoryIn(state.params._id, from, until, response => this.setState({ in_list: response.entradas }), error => console.log(error));
+    }
+
+    onButtonPress = () => {
+        console.log(1);
     }
 
     render() {
         const { navigate, state } = this.props.navigation;
-        console.log(state.params);
+        const { in_list, out_list, choosed } = this.state;
+        console.log(state.params); // temporal
+        console.log(in_list, out_list); // temporal
         return (
-            <ScrollView style={style.mainView}>
+            <View style={style.mainView}>
                 <Text style={style.title}>
                     Inventarios
                 </Text>
@@ -40,76 +55,87 @@ export default class ShowInventory extends Component {
                 <View style={style.mainBox}>
                     <TouchableOpacity onPress={() => navigate('List')}>
                         <Text style={style.backLink}> Atrás</Text>
-
-                        {
-                            [
-                                {
-                                    label: 'Existencia actual:',
-                                    value: state.params.existencia,
-                                    show: true,
-                                },
-                                {
-                                    label: 'Tipo de inventario:',
-                                    value: state.params.tipo,
-                                    show: state.params.tipo,
-                                },
-                                {
-                                    label: 'Categoría:',
-                                    value: state.params.categoria,
-                                    show: state.params.categoria,
-                                },
-                                {
-                                    label: 'Descripción:',
-                                    value: state.params.descripcion,
-                                    show: state.params.descripcion,
-                                },
-                                {
-                                    label: 'Código interno:',
-                                    value: state.params.codigo_interno,
-                                    show: state.params.codigo_interno,
-                                },
-                                {
-                                    label: 'Estado:',
-                                    value: state.params.status ? 'Activo' : 'Inactivo',
-                                    show: true,
-                                },
-                                {
-                                    label: '# Activo:',
-                                    value: state.params.numero_activo,
-                                    show: state.params.numero_activo,
-                                },
-                                {
-                                    label: 'Mínimo de existencia:',
-                                    value: state.params.minimo_existencia,
-                                    show: state.params.minimo_existencia,
-                                },
-                                {
-                                    label: 'Laboratorio asociado:',
-                                    value: state.params.id_laboratorio,
-                                    show: state.params.id_laboratorio,
-                                },
-                                {
-                                    label: 'Usuario creador:',
-                                    value: state.params.id_usuario_creador,
-                                    show: state.params.id_usuario_creador,
-                                },
-                                ...state.params.atributos_extra.map(elem => ({
-                                    label: elem.nombre,
-                                    value: elem.valor,
-                                    show: elem.importante // show flag
-                                }))
-                            ].map((elem, index) => (
-                                <Fragment key={index}>
-                                    {
-                                        elem.show && <Text style={style.elemText}><Text style={style.elemBoldText}>{elem.label}</Text> {elem.value}</Text>
-                                    }
-                                </Fragment>
-                            ))
-
-                        }
                     </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+                        <TouchableOpacity disabled={false} onPress={this.onButtonPress} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: '40%', borderRadius: 3, minHeight: 22, marginLeft: '5%' }}>
+                            <Text style={{ color: 'white', fontSize: 12 }}>Agregar entrada</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity disabled={false} onPress={this.onButtonPress} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: '40%', borderRadius: 3, minHeight: 22, marginLeft: '10%' }}>
+                            <Text style={{ color: 'white', fontSize: 12 }}>Agregar salida</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {
+                        [
+                            {
+                                label: 'Existencia actual:',
+                                value: state.params.existencia,
+                                show: true,
+                            },
+                            {
+                                label: 'Tipo de inventario:',
+                                value: state.params.tipo,
+                                show: state.params.tipo,
+                            },
+                            {
+                                label: 'Categoría:',
+                                value: state.params.categoria,
+                                show: state.params.categoria,
+                            },
+                            {
+                                label: 'Descripción:',
+                                value: state.params.descripcion,
+                                show: state.params.descripcion,
+                            },
+                            {
+                                label: 'Código interno:',
+                                value: state.params.codigo_interno,
+                                show: state.params.codigo_interno,
+                            },
+                            {
+                                label: 'Estado:',
+                                value: state.params.status ? 'Activo' : 'Inactivo',
+                                show: true,
+                            },
+                            {
+                                label: '# Activo:',
+                                value: state.params.numero_activo,
+                                show: state.params.numero_activo,
+                            },
+                            {
+                                label: 'Mínimo de existencia:',
+                                value: state.params.minimo_existencia,
+                                show: state.params.minimo_existencia,
+                            },
+                            {
+                                label: 'Laboratorio asociado:',
+                                value: state.params.id_laboratorio,
+                                show: state.params.id_laboratorio,
+                            },
+                            {
+                                label: 'Usuario creador:',
+                                value: state.params.id_usuario_creador,
+                                show: state.params.id_usuario_creador,
+                            },
+                            ...state.params.atributos_extra.map(elem => ({
+                                label: elem.nombre,
+                                value: elem.valor,
+                                show: elem.importante // show flag
+                            }))
+                        ].map((elem, index) => (
+                            <Fragment key={index}>
+                                {
+                                    elem.show && <Text style={style.elemText}><Text style={style.elemBoldText}>{elem.label}</Text> {elem.value}</Text>
+                                }
+                            </Fragment>
+                        ))
+
+                    }
                 </View>
-            </ScrollView>
+                <View style={style.selectViewButtons}>
+                    <Text onPress={() => this.setState({ choosed: 'entrada' })} style={{ ...style.selectViewButton, borderBottomColor: choosed === 'entrada' ? colors.lightBlue : 'transparent' }}> Entradas </Text>
+                    <Text onPress={() => this.setState({ choosed: 'salida' })} style={{ ...style.selectViewButton, borderBottomColor: choosed === 'salida' ? colors.lightBlue : 'transparent' }}> Salidas </Text>
+                </View>
+            </View>
         )
     }
 }
@@ -138,8 +164,7 @@ const style = {
     },
     backLink: {
         fontWeight: 'bold',
-        fontSize: 12,
-        paddingBottom: 10
+        fontSize: 12
     },
     elemText: {
         fontSize: 14
@@ -147,4 +172,15 @@ const style = {
     elemBoldText: {
         fontWeight: 'bold'
     },
+    selectViewButtons: {
+        flexDirection: 'row',
+        padding: 10
+    },
+    selectViewButton: {
+        fontSize: 18,
+        width: '50%',
+        textAlign: 'center',
+        borderBottomWidth: 2,
+        paddingBottom: 10
+    }
 }
