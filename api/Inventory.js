@@ -53,6 +53,24 @@ const Inventory = {
         }).then(response => response.json())
             .then(thenFn)
             .catch(catchFn);
+    },
+    saveInventoryIn: (data, thenFn, catchFn) => {
+        fetch(`${BASE_URI}/salida/registrar`, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(response => response.json())
+            .then(thenFn)
+            .catch(catchFn);
+    },
+    saveInventoryOut: (data, thenFn, catchFn) => {
+        fetch(`${BASE_URI}/entrada/registrar`, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(response => response.json())
+            .then(thenFn)
+            .catch(catchFn);
     }
 };
 

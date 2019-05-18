@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, Image, Button, TouchableOpacity, Picker } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 // import { ScrollView } from 'react-native-gesture-handler';
 import Inventory from '../../api/Inventory';
 import colors from "../../util/Colors";
+import ModalInventory from '../common/ModalInventory';
 
 export default class ShowInventory extends Component {
     constructor(props) {
@@ -11,6 +12,7 @@ export default class ShowInventory extends Component {
             in_list: [],
             out_list: [],
             choosed: 'entrada',
+            modalVisible: false,
         }
     }
 
@@ -35,17 +37,19 @@ export default class ShowInventory extends Component {
         Inventory.inventoryIn(state.params._id, from, until, response => this.setState({ in_list: response.entradas }), error => console.log(error));
     }
 
-    onButtonPress = () => {
-        console.log(1);
+    modalOpen = (modalType) => {
+        this.setState({ modalVisible: !this.state.modalVisible, modalType });
     }
 
     render() {
         const { navigate, state } = this.props.navigation;
-        const { in_list, out_list, choosed } = this.state;
-        console.log(state.params); // temporal
-        console.log(in_list, out_list); // temporal
+        const { in_list, out_list, choosed, modalVisible, modalType } = this.state;
+        // console.log(quantity, comentaries); // temporal
         return (
             <View style={style.mainView}>
+
+                <ModalInventory modalType={modalType} modalVisible={modalVisible} modalOpenFn={this.modalOpen} />
+
                 <Text style={style.title}>
                     Inventarios
                 </Text>
@@ -57,10 +61,10 @@ export default class ShowInventory extends Component {
                         <Text style={style.backLink}> Atrás</Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
-                        <TouchableOpacity disabled={false} onPress={this.onButtonPress} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: '40%', borderRadius: 3, minHeight: 22, marginLeft: '5%' }}>
+                        <TouchableOpacity disabled={false} onPress={() => this.modalOpen('entradas')} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: '40%', borderRadius: 3, minHeight: 22, marginLeft: '5%' }}>
                             <Text style={{ color: 'white', fontSize: 12 }}>Agregar entrada</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity disabled={false} onPress={this.onButtonPress} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: '40%', borderRadius: 3, minHeight: 22, marginLeft: '10%' }}>
+                        <TouchableOpacity disabled={false} onPress={() => this.modalOpen('salidas')} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: '40%', borderRadius: 3, minHeight: 22, marginLeft: '10%' }}>
                             <Text style={{ color: 'white', fontSize: 12 }}>Agregar salida</Text>
                         </TouchableOpacity>
                     </View>
@@ -174,10 +178,10 @@ const style = {
     },
     selectViewButtons: {
         flexDirection: 'row',
-        padding: 10
+        padding: 20
     },
     selectViewButton: {
-        fontSize: 18,
+        fontSize: 16,
         width: '50%',
         textAlign: 'center',
         borderBottomWidth: 2,
