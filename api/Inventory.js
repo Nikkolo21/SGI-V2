@@ -28,34 +28,26 @@ const Inventory = {
             .then(thenFn)
             .catch(catchFn);
     },
-    inventoryIn: (id, from = '', until = '', thenFn, catchFn) => {
+    inventoryIn: (data, thenFn, catchFn) => {
         fetch(`${BASE_URI}/entrada/buscar`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "inventario": id,
-                "fecha_inicio": from,
-                "fecha_fin": until,
-            })
+            body: JSON.stringify(data)
         }).then(response => response.json())
             .then(thenFn)
             .catch(catchFn);
     },
-    inventoryOut: (id, from = '', until = '', thenFn, catchFn) => {
+    inventoryOut: (data, thenFn, catchFn) => {
         fetch(`${BASE_URI}/salida/buscar`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "inventario": id,
-                "fecha_inicio": from,
-                "fecha_fin": until,
-            })
+            body: JSON.stringify(data)
         }).then(response => response.json())
             .then(thenFn)
             .catch(catchFn);
     },
-    saveInventoryIn: (data, thenFn, catchFn) => {
-        fetch(`${BASE_URI}/salida/registrar`, {
+    saveInventory: (type, data, thenFn, catchFn) => {
+        fetch(`${BASE_URI}/${ type === 'in' ? 'entrada' : 'salida'}/registrar`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -63,15 +55,22 @@ const Inventory = {
             .then(thenFn)
             .catch(catchFn);
     },
-    saveInventoryOut: (data, thenFn, catchFn) => {
-        fetch(`${BASE_URI}/entrada/registrar`, {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+    getCategoriesIn: (thenFn, catchFn) => {
+        fetch(`${BASE_URI}/entrada/categorias`, {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' }
         }).then(response => response.json())
             .then(thenFn)
             .catch(catchFn);
-    }
+    },
+    getCategoriesOut: (thenFn, catchFn) => {
+        fetch(`${BASE_URI}/salida/categorias`, {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(response => response.json())
+            .then(thenFn)
+            .catch(catchFn);
+    },
 };
 
 export default Inventory;

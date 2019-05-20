@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text, TouchableOpacity } from "react-native";
+
 // import { ScrollView } from 'react-native-gesture-handler';
 import Inventory from '../../api/Inventory';
 import colors from "../../util/Colors";
 import ModalInventory from '../common/ModalInventory';
+
 
 export default class ShowInventory extends Component {
     constructor(props) {
@@ -29,12 +31,18 @@ export default class ShowInventory extends Component {
 
     getInventoryOut = () => {
         const { state, from, until } = this.props.navigation;
-        Inventory.inventoryOut(state.params._id, from, until, response => this.setState({ out_list: response.salidas }), error => console.log(error));
+        const params = {
+            inventario: state.params._id
+        }
+        Inventory.inventoryOut(params, response => this.setState({ out_list: response.salidas }), error => console.log(error));
     }
 
     getInventoryIn = () => {
         const { state, from, until } = this.props.navigation;
-        Inventory.inventoryIn(state.params._id, from, until, response => this.setState({ in_list: response.entradas }), error => console.log(error));
+        const params = {
+            inventario: state.params._id
+        }
+        Inventory.inventoryIn(params, response => this.setState({ in_list: response.entradas }), error => console.log(error));
     }
 
     modalOpen = (modalType) => {
@@ -44,11 +52,12 @@ export default class ShowInventory extends Component {
     render() {
         const { navigate, state } = this.props.navigation;
         const { in_list, out_list, choosed, modalVisible, modalType } = this.state;
+        console.log(in_list, out_list);
         // console.log(quantity, comentaries); // temporal
         return (
             <View style={style.mainView}>
 
-                <ModalInventory modalType={modalType} modalVisible={modalVisible} modalOpenFn={this.modalOpen} />
+                <ModalInventory inventory={state.params} modalType={modalType} modalVisible={modalVisible} modalOpenFn={this.modalOpen} />
 
                 <Text style={style.title}>
                     Inventarios

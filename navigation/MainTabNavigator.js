@@ -6,6 +6,7 @@ import ForgotPasswordForm from '../components/Login/ForgotPasswordForm';
 import ListInventory from '../components/inventory/ListInventory';
 import ShowInventory from '../components/inventory/ShowInventory';
 import ChangePasswordForm from '../components/Login/ChangePasswordForm';
+import ModalInventory from '../components/common/ModalInventory';
 
 export const ForgotPasswordStack = createStackNavigator({
   Forgot: ForgotPasswordForm,
@@ -19,6 +20,7 @@ export const LoginStack = createStackNavigator({
 export const AppStack = createStackNavigator({
   List: ListInventory,
   Show: ShowInventory,
+  Modal: ModalInventory,
 }, { initialRouteKey: 'List', initialRouteName: 'List' });
 
 export default createBottomTabNavigator({

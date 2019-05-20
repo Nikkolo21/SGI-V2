@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import { Card } from '../common/Card';
-import { View, Text, Image, Button, TouchableOpacity, Picker } from "react-native";
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, Picker } from "react-native";
 import Inventory from '../../api/Inventory';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -42,6 +41,7 @@ export default class ListInventory extends Component {
                     <Picker
                         selectedValue={type}
                         style={style.picker}
+                        mode={'dropdown'}
                         onValueChange={(itemValue, itemIndex) => this.getCategories(itemValue)
                         }>
                         {
@@ -53,6 +53,7 @@ export default class ListInventory extends Component {
                         <Picker
                             selectedValue={category}
                             style={style.picker}
+                            mode={'dropdown'}
                             onValueChange={(itemValue, itemIndex) => this.setState({ category: itemValue })
                             }>
                             {
@@ -63,7 +64,7 @@ export default class ListInventory extends Component {
                 </View>
                 {
                     inventoryList.map((elem, index) => (
-                        <TouchableOpacity key={index} onPress={() => navigate('Show', elem)}>
+                        <TouchableOpacity key={index} onPress={() => navigate('Show', elem )}>
                             <View style={style.inventoryBox}>
                                 <View style={style.inventoryElement}>
                                     <Text> <Text style={style.textBold}> Nombre: </Text> {elem.nombre} </Text>
