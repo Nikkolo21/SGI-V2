@@ -5,6 +5,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import Inventory from '../../api/Inventory';
 import colors from "../../util/Colors";
 import ModalInventory from '../common/ModalInventory';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default class ShowInventory extends Component {
@@ -53,9 +54,10 @@ export default class ShowInventory extends Component {
         const { navigate, state } = this.props.navigation;
         const { in_list, out_list, choosed, modalVisible, modalType } = this.state;
         console.log(in_list, out_list);
+        let listingInAndOut = choosed === 'entrada' ? in_list : out_list;
         // console.log(quantity, comentaries); // temporal
         return (
-            <View style={style.mainView}>
+            <ScrollView style={style.mainView}>
 
                 <ModalInventory inventory={state.params} modalType={modalType} modalVisible={modalVisible} modalOpenFn={this.modalOpen} />
 
@@ -144,11 +146,51 @@ export default class ShowInventory extends Component {
 
                     }
                 </View>
+
                 <View style={style.selectViewButtons}>
                     <Text onPress={() => this.setState({ choosed: 'entrada' })} style={{ ...style.selectViewButton, borderBottomColor: choosed === 'entrada' ? colors.lightBlue : 'transparent' }}> Entradas </Text>
                     <Text onPress={() => this.setState({ choosed: 'salida' })} style={{ ...style.selectViewButton, borderBottomColor: choosed === 'salida' ? colors.lightBlue : 'transparent' }}> Salidas </Text>
                 </View>
-            </View>
+                
+                <Fragment>
+                    {
+                        listingInAndOut.map((elem, index) => 
+                            <View key={index} style={{ ...style.mainBox, marginBottom: 10 }}>
+                                {
+                                    [
+                                        {
+                                            label: 'Cantidad:',
+                                            value: elem.cantidad,
+                                            show: true,
+                                        },
+                                        {
+                                            label: 'Comentarios:',
+                                            value: elem.comentarios[0].contenido,
+                                            show: elem.comentarios[0] && elem.comentarios[0].contenido,
+                                        },
+                                        {
+                                            label: 'Fecha de creación:',
+                                            value: elem.createdAt,
+                                            show: elem.createdAt,
+                                        },
+                                        {
+                                            label: 'Usuario ejecutor:',
+                                            value: elem.usuario_ejecutor,
+                                            show: true,
+                                        },
+                                    ].map((elem, index) => (
+                                        <Fragment key={index}>
+                                            {
+                                                elem.show && <Text style={style.elemText}><Text style={style.elemBoldText}>{elem.label}</Text> {elem.value}</Text>
+                                            }
+                                        </Fragment>
+                                    ))
+                                }
+                            </View>
+                        )
+                    }
+                </Fragment>
+            </ScrollView>
         )
     }
 }
