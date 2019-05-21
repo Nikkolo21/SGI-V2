@@ -53,24 +53,22 @@ export default class ShowInventory extends Component {
     render() {
         const { navigate, state } = this.props.navigation;
         const { in_list, out_list, choosed, modalVisible, modalType } = this.state;
-        console.log(in_list, out_list);
         let listingInAndOut = choosed === 'entrada' ? in_list : out_list;
-        // console.log(quantity, comentaries); // temporal
         return (
             <ScrollView style={style.mainView}>
 
                 <ModalInventory inventory={state.params} modalType={modalType} modalVisible={modalVisible} modalOpenFn={this.modalOpen} />
 
-                <Text style={style.title}>
-                    Inventarios
-                </Text>
+                <TouchableOpacity onPress={() => navigate('List')}>
+                    <Text style={style.title}>
+                        &#60; Inventarios
+                    </Text>
+                </TouchableOpacity>
+
                 <Text style={style.subtitle}>
                     {state.params.nombre}
                 </Text>
                 <View style={style.mainBox}>
-                    <TouchableOpacity onPress={() => navigate('List')}>
-                        <Text style={style.backLink}> Atrás</Text>
-                    </TouchableOpacity>
                     <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
                         <TouchableOpacity disabled={false} onPress={() => this.modalOpen('entradas')} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: '40%', borderRadius: 3, minHeight: 22, marginLeft: '5%' }}>
                             <Text style={{ color: 'white', fontSize: 12 }}>Agregar entrada</Text>
@@ -206,20 +204,17 @@ const style = {
     title: {
         fontSize: 20,
         paddingHorizontal: 10,
-        paddingVertical: 10
+        paddingVertical: 10,
+        fontWeight: 'bold'
     },
     subtitle: {
         fontSize: 16,
         paddingHorizontal: 10,
-        paddingVertical: 10
+        paddingBottom: 10
     },
     mainBox: {
         padding: 20,
         backgroundColor: 'white'
-    },
-    backLink: {
-        fontWeight: 'bold',
-        fontSize: 12
     },
     elemText: {
         fontSize: 14

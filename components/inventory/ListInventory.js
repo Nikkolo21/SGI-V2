@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Picker } from "react-native";
 import Inventory from '../../api/Inventory';
 import { ScrollView } from 'react-native-gesture-handler';
+import colors from '../../util/Colors';
 
 export default class ListInventory extends Component {
     constructor(props) {
@@ -21,17 +22,29 @@ export default class ListInventory extends Component {
 
     async componentDidMount() {
         await Inventory.types(response => this.setState({ types: response.data || [], type: response.data[0] }), error => console.log(error));
-        await Inventory.list("a", response => this.setState({ inventoryList: response }), error => console.log(error));
+        await this.getInventories("a");
+    }
+    
+    getInventories = async (query) => {
+        await Inventory.list(query, response => this.setState({ inventoryList: response }), error => console.log(error));
     }
 
     getCategories = (type) => {
         this.setState({ type, categories: null, category: null });
-        Inventory.category(type, response => this.setState({ categories: response.data || [], category: response.data[0] }), error => console.log(error));
+        Inventory.category(type, response => { 
+            this.setState({ categories: response.data || [], query: response.data[0] });
+            this.setQuery(response.data[0]);
+        }, error => console.log(error));
+    }
+
+    setQuery = async (query) => {
+        this.setState({ query });
+        await this.getInventories(query);
     }
 
     render() {
         const { navigate } = this.props.navigation;
-        const { type, category, types, categories, inventoryList } = this.state;
+        const { type, category, types, categories, inventoryList, query } = this.state;
         return (
             <ScrollView style={style.mainView}>
                 <Text style={style.title}>
@@ -40,7 +53,7 @@ export default class ListInventory extends Component {
                 <View style={style.mainBox}>
                     <Picker
                         selectedValue={type}
-                        style={style.picker}
+                        style={{ ...style.picker, backgroundColor: colors.lightBlue, color: 'white' }}
                         mode={'dropdown'}
                         onValueChange={(itemValue, itemIndex) => this.getCategories(itemValue)
                         }>
@@ -52,14 +65,36 @@ export default class ListInventory extends Component {
                         categories &&
                         <Picker
                             selectedValue={category}
-                            style={style.picker}
+                            style={{ ...style.picker, color: colors.lightBlue, backgroundColor: 'white' }}
                             mode={'dropdown'}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ category: itemValue })
+                            onValueChange={(itemValue, itemIndex) => {this.setState({ category: itemValue }); this.setQuery(itemValue); }
                             }>
                             {
                                 categories.map((elem, index) => <Picker.Item key={index} label={elem} value={elem} />)
                             }
                         </Picker>
+                    }
+                </View>
+                <View style={{...style.mainBox, paddingVertical: 20 }}>
+                    {
+                        [
+                            {
+                                label: 'Disponibles',
+                                value: 'disponible',
+                            },
+                            {
+                                label: 'Sin disponilidad',
+                                value: 'no_disponible',
+                            },
+                            {
+                                label: 'Disponibilidad min',
+                                value: 'minimo',
+                            }
+                        ].map((elem, index) => (
+                            <TouchableOpacity key={index} disabled={false} onPress={() => { this.setQuery(elem.value); this.setState({ categories: null })} } style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: query === elem.value ? 'white': colors.lightBlue, paddingVertical: 5, width: '30%', borderRadius: 3, minHeight: 22, marginLeft: '3%' }}>
+                                <Text style={{ color: query === elem.value ? colors.lightBlue : 'white', fontSize: 12 }}>{elem.label}</Text>
+                            </TouchableOpacity>
+                         ))
                     }
                 </View>
                 {
@@ -85,13 +120,16 @@ const style = {
         flex: 1,
         flexDirection: 'column',
         backgroundColor: 'rgba(10, 10, 10, 0.05)',
+        paddingVertical: 20,
     },
     mainBox: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        paddingHorizontal: 10,
     },
     title: {
         fontSize: 20,
         padding: 20,
+        fontWeight: 'bold'
     },
     textBold: {
         fontWeight: 'bold'
@@ -104,7 +142,9 @@ const style = {
         padding: 10
     },
     picker: {
-        height: 50,
-        width: 150
+        height: 30,
+        marginRight: 10,
+        borderRadius: 5,
+        width: 120,
     },
 }
