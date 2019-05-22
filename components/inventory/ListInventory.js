@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Picker } from "react-native";
 import Inventory from '../../api/Inventory';
 import { ScrollView } from 'react-native-gesture-handler';
 import colors from '../../util/Colors';
+import { AsyncStorage } from "react-native";
 
 export default class ListInventory extends Component {
     constructor(props) {
@@ -16,16 +17,13 @@ export default class ListInventory extends Component {
         }
     }
 
-    static navigationOptions = {
-        header: null,
-    };
-
     async componentDidMount() {
         await Inventory.types(response => this.setState({ types: response.data || [], type: response.data[0] }), error => console.log(error));
         await this.getInventories("a");
     }
     
     getInventories = async (query) => {
+        const value = await AsyncStorage.getItem('sessionId');
         await Inventory.list(query, response => this.setState({ inventoryList: response }), error => console.log(error));
     }
 
@@ -47,9 +45,6 @@ export default class ListInventory extends Component {
         const { type, category, types, categories, inventoryList, query } = this.state;
         return (
             <ScrollView style={style.mainView}>
-                <Text style={style.title}>
-                    Inventarios
-                </Text>
                 <View style={style.mainBox}>
                     <Picker
                         selectedValue={type}
@@ -114,6 +109,31 @@ export default class ListInventory extends Component {
         )
     }
 }
+
+ListInventory.navigationOptions = props => {
+    selectItem = (value) => {
+        if (value === 'logout') {
+            props.navigation.navigate('Login');
+            AsyncStorage.clear();
+        } else if (value === 'profile') {
+            props.navigation.navigate('Profile');
+        }
+    }
+    return {
+        headerTitle: "Inventarios",
+        headerRight: (
+            <View style={{ flexDirection: 'row', width: 150 }}>
+                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: 70, borderRadius: 3, minHeight: 22, marginRight: 5 }} onPress={() => this.selectItem('profile')}>
+                    <Text style={{ color: 'white' }}>Perfil</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.redButton, paddingVertical: 5, width: 70, borderRadius: 3, minHeight: 22, marginRight: 5 }} onPress={() => this.selectItem('logout')}>
+                    <Text style={{ color: 'white' }}>Logout</Text>
+                </TouchableOpacity>
+            </View>
+        ),
+    };
+};
+
 
 const style = {
     mainView: {

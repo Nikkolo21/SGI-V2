@@ -5,12 +5,14 @@ import { Card } from "../common/Card";
 import { CardSection } from "../common/CardSection";
 import { Input } from "../common/Input";
 import { Spinner } from "../common/Spinner";
+import { AsyncStorage } from "react-native";
 
 import styles from "./style";
 import Auth from "../../api/Auth";
 import colors from "../../util/Colors";
 
 const imgSource = "../../assets/images/logo_blanco.png";
+
 
 export default class LoginForm extends Component {
     constructor(props) {
@@ -36,9 +38,10 @@ export default class LoginForm extends Component {
     onButtonPress = async () => {
         const { email, password } = this.state;
         this.setState({ loading: true });
-        Auth.login(email, password, response => {
+        Auth.login(email, password, async response => {
             this.setState({ loading: false });
             if (response.httpStatus === 200) {
+                await AsyncStorage.setItem('sessionId', `${response.data.usuario.id}`);
                 this.props.navigation.navigate('List');
             } else {
                 this.setState({ error: response.error || response.data });

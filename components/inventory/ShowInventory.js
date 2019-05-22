@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, TouchableOpacity } from "react-native";
-
-// import { ScrollView } from 'react-native-gesture-handler';
+import { View, Text, TouchableOpacity, Button } from "react-native";
 import Inventory from '../../api/Inventory';
 import colors from "../../util/Colors";
 import ModalInventory from '../common/ModalInventory';
 import { ScrollView } from 'react-native-gesture-handler';
+import { AsyncStorage } from "react-native";
 
 
 export default class ShowInventory extends Component {
@@ -18,12 +17,6 @@ export default class ShowInventory extends Component {
             modalVisible: false,
         }
     }
-
-    static navigationOptions = {
-        header: null,
-        from: '',
-        until: '',
-    };
 
     componentDidMount() {
         this.getInventoryIn();
@@ -59,17 +52,11 @@ export default class ShowInventory extends Component {
 
                 <ModalInventory inventory={state.params} modalType={modalType} modalVisible={modalVisible} modalOpenFn={this.modalOpen} />
 
-                <TouchableOpacity onPress={() => navigate('List')}>
-                    <Text style={style.title}>
-                        &#60; Inventarios
-                    </Text>
-                </TouchableOpacity>
-
                 <Text style={style.subtitle}>
                     {state.params.nombre}
                 </Text>
                 <View style={style.mainBox}>
-                    <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+                    <View style={style.mainButtons}>
                         <TouchableOpacity disabled={false} onPress={() => this.modalOpen('entradas')} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: '40%', borderRadius: 3, minHeight: 22, marginLeft: '5%' }}>
                             <Text style={{ color: 'white', fontSize: 12 }}>Agregar entrada</Text>
                         </TouchableOpacity>
@@ -193,6 +180,30 @@ export default class ShowInventory extends Component {
     }
 }
 
+ShowInventory.navigationOptions = props => {
+    selectItem = (value) => {
+        if (value === 'logout') {
+            props.navigation.navigate('Login');
+            AsyncStorage.clear();
+        } else if (value === 'profile') {
+            props.navigation.navigate('Profile');
+        }
+    }
+    return {
+        headerTitle: "Inventarios",
+        headerRight: (
+            <View style={{ flexDirection: 'row', width: 150 }}>
+                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: 70, borderRadius: 3, minHeight: 22, marginRight: 5 }} onPress={() => this.selectItem('profile')}>
+                    <Text style={{ color: 'white' }}>Perfil</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.redButton, paddingVertical: 5, width: 70, borderRadius: 3, minHeight: 22, marginRight: 5 }} onPress={() => this.selectItem('logout')}>
+                    <Text style={{ color: 'white' }}>Logout</Text>
+                </TouchableOpacity>
+            </View>
+        ),
+    };
+};
+
 
 const style = {
     mainView: {
@@ -204,7 +215,6 @@ const style = {
     title: {
         fontSize: 20,
         paddingHorizontal: 10,
-        paddingVertical: 10,
         fontWeight: 'bold'
     },
     subtitle: {
@@ -232,5 +242,10 @@ const style = {
         textAlign: 'center',
         borderBottomWidth: 2,
         paddingBottom: 10
-    }
+    },
+    mainButtons: {
+        flexDirection: 'row',
+        paddingVertical: 20
+    },
+
 }
