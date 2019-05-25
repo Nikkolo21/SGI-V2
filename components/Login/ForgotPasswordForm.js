@@ -37,7 +37,7 @@ export default class ForgotPasswordForm extends Component {
                 console.log(response);
                 if (response.httpStatus === 200) {
                     this.setState({ error: false });
-                    this.props.navigation.navigate('ChangePassword');
+                    this.props.navigation.navigate('ChangePassword', { email });
                 } else {
                     this.setState({ error: response.error || response.data });
                 }

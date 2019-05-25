@@ -165,6 +165,6 @@ const style = {
         height: 30,
         marginRight: 10,
         borderRadius: 5,
-        width: 120,
+        width: 150,
     },
 }

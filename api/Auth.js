@@ -15,7 +15,6 @@ const Auth = {
             .catch(catchFn);
     },
     sendEmailCode: (email, thenFn, catchFn) => {
-        console.log(email);
         fetch(`${BASE_URI}/usuario/password/sendemail`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },

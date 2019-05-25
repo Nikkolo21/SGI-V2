@@ -36,22 +36,37 @@ export default class ChangePasswordForm extends Component {
         this.setState({ code, error: false });
     }
 
-    onButtonPress = async () => {
+    validForm = () => {
         const { code, password1, password2 } = this.state;
-        this.setState({ loading: true });
-        Auth.recoverPassword(email,
-            response => {
-                this.setState({ loading: false });
-                console.log(response);
-                if (response.httpStatus === 200) {
-                    this.setState({ error: false });
-                    this.props.navigation.navigate('ChangePassword');
-                } else {
-                    this.setState({ error: response.error || response.data });
-                }
-            },
-            error => console.log(error)
-        )
+        if (!code || !password1 || !password2) {
+            this.setState({ error: 'Debe completar todos los campos.'});
+        } else {
+            if (password1 !== password2) {
+                this.setState({ error: 'Las contraseñas deben coincidir.'});
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    onButtonPress = async () => {
+        const { code, password1 } = this.state;
+        if (this.validForm()){
+            this.setState({ loading: true });
+            Auth.recoverPassword(code, this.props.navigation.state.params.email, password1,
+                response => {
+                    this.setState({ loading: false });
+                    if (response.httpStatus === 200) {
+                        this.setState({ error: false });
+                        this.props.navigation.navigate('Login');
+                    } else {
+                        this.setState({ error: response.error || response.data });
+                    }
+                },
+                error => console.log(error)
+            )
+        }
     }
     renderError = () => {
         if (this.state.error) {

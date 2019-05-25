@@ -41,8 +41,12 @@ export default class LoginForm extends Component {
         Auth.login(email, password, async response => {
             this.setState({ loading: false });
             if (response.httpStatus === 200) {
-                await AsyncStorage.setItem('sessionId', `${response.data.usuario.id}`);
-                this.props.navigation.navigate('List');
+                if(response.data.usuario.rol === 'restringido') {
+                    this.setState({ error: 'Su usuario se encuentra restringido por favor contacte al administrador.' });
+                } else {
+                    await AsyncStorage.setItem('sessionId', `${response.data.usuario.id}`);
+                    this.props.navigation.navigate('List');
+                }
             } else {
                 this.setState({ error: response.error || response.data });
             }
