@@ -111,10 +111,10 @@ export default class ListInventory extends Component {
 }
 
 ListInventory.navigationOptions = props => {
-    selectItem = (value) => {
+    selectItem = async value => {
         if (value === 'logout') {
+            await AsyncStorage.clear();
             props.navigation.navigate('Login');
-            AsyncStorage.clear();
         } else if (value === 'profile') {
             props.navigation.navigate('Profile');
         }

@@ -25,17 +25,14 @@ export default class ModalInventory extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.modalType && this.state.modalType !== nextProps.modalType) {
             this.setState({ modalType: nextProps.modalType })
-            if (nextProps.modalType === 'entradas') {
-                Inventory.getCategoriesIn(response => this.setState({ categories: response, category: response[0] }), error => console.log(error));
-            } else {
+            nextProps.modalType === 'entradas' ?
+                Inventory.getCategoriesIn(response => this.setState({ categories: response, category: response[0] }), error => console.log(error)):
                 Inventory.getCategoriesOut(response => this.setState({ categories: response, category: response[0] }), error => console.log(error));
-            }
         }
-        console.log(nextProps);
     }
 
     closeModal = () => {
-        this.props.modalOpenFn();
+        this.props.modalOpenFn(this.props.modalType);
         this.setState({ quantity: undefined, comentaries: undefined });
     }
 
@@ -55,12 +52,8 @@ export default class ModalInventory extends Component {
         }
         await Inventory.saveInventory(modalType === 'entradas' ? 'in' : 'out', params, response => {
             this.setState({ loading: false });
-            if (response && response._id) {
-                console.log(response);
-                this.closeModal();
-            } else {
-                this.setState({ error: response.error || response.data });
-            }
+            response && response._id ? this.closeModal() : this.setState({ error: response.error || response.data });
+            
         }, error => {
             this.setState({ loading: false });
         });

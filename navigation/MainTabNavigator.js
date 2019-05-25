@@ -1,4 +1,3 @@
-import React from 'react';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import LoginForm from '../components/Login/LoginForm';

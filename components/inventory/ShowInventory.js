@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, TouchableOpacity, Button } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Inventory from '../../api/Inventory';
 import colors from "../../util/Colors";
 import ModalInventory from '../common/ModalInventory';
@@ -40,7 +40,11 @@ export default class ShowInventory extends Component {
     }
 
     modalOpen = (modalType) => {
-        this.setState({ modalVisible: !this.state.modalVisible, modalType });
+        const { modalVisible } = this.state;
+        this.setState({ modalVisible: !modalVisible, modalType }); 
+        if (modalVisible) {
+            modalType === 'entradas' ? this.getInventoryIn() : this.getInventoryOut();
+        } 
     }
 
     render() {
@@ -181,10 +185,10 @@ export default class ShowInventory extends Component {
 }
 
 ShowInventory.navigationOptions = props => {
-    selectItem = (value) => {
+    selectItem = async value => {
         if (value === 'logout') {
+            await AsyncStorage.clear();
             props.navigation.navigate('Login');
-            AsyncStorage.clear();
         } else if (value === 'profile') {
             props.navigation.navigate('Profile');
         }
@@ -245,7 +249,7 @@ const style = {
     },
     mainButtons: {
         flexDirection: 'row',
-        paddingVertical: 20
+        paddingBottom: 20
     },
 
 }

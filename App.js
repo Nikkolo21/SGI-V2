@@ -1,21 +1,14 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
-import { AsyncStorage } from "react-native";
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
-    isLogged: false
   };
 
-  getNavbar = async () => {
-    await AsyncStorage.getItem('sessionId') && this.setState({ isLogged: true });
-  }
-
   render() {
-    const { isLogged } = this.state;
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -28,7 +21,6 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          { isLogged && <Text>holaa</Text> }
           <AppNavigator />
         </View>
       );

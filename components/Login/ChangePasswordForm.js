@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View, Text, Image, Button, TouchableOpacity } from "react-native";
-// import { Button } from "../common/Button";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Card } from "../common/Card";
 import { CardSection } from "../common/CardSection";
 import { Input } from "../common/Input";
