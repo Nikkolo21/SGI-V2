@@ -4,6 +4,7 @@ import Inventory from '../../api/Inventory';
 import { ScrollView } from 'react-native-gesture-handler';
 import colors from '../../util/Colors';
 import { AsyncStorage } from "react-native";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class ListInventory extends Component {
     constructor(props) {
@@ -112,23 +113,36 @@ export default class ListInventory extends Component {
 
 ListInventory.navigationOptions = props => {
     selectItem = async value => {
-        if (value === 'Logout') {
+        if (value === 'Login') {
             await AsyncStorage.clear();
-            props.navigation.navigate('Login');
-        } else if (value === 'Perfil') {
-            props.navigation.navigate('Profile');
-        } else if (value === 'QR') {
-            props.navigation.navigate('QR');
         }
+        props.navigation.navigate(value);
     }
     return {
         headerTitle: "Inventarios",
         headerRight: (
-            <View style={{ flexDirection: 'row', width: 165 }}>
+            <View style={{ flexDirection: 'row', width: 140 }}>
                 {
-                    [ "QR", "Perfil", "Logout" ].map(elem => 
-                        <TouchableOpacity style={{...style.navBarButtons, backgroundColor: elem === 'Logout' ? colors.redButton : colors.lightBlue}} onPress={() => this.selectItem(elem)}>
-                            <Text style={{ color: 'white' }}>{elem}</Text>
+                    [
+                        {
+                            goTo: 'Camera',
+                            icon: 'ios-camera',
+                        }, 
+                        {
+                            goTo: 'QR',
+                            icon: 'ios-qr-scanner',
+                        },
+                        {
+                            goTo: 'Profile',
+                            icon: 'ios-person',
+                        },
+                        {
+                            goTo: 'Login',
+                            icon: 'ios-log-out',
+                        },
+                    ].map(elem =>
+                        <TouchableOpacity style={{...style.navBarButtons, backgroundColor: elem.goTo === 'Login' ? colors.redButton : colors.lightBlue}} onPress={() => this.selectItem(elem.goTo)}>
+                            <Icon name={elem.icon} size={20} color="white" />
                         </TouchableOpacity>
                     )
                 }
@@ -173,7 +187,7 @@ const style = {
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 5,
-        width: 50,
+        width: 30,
         borderRadius: 3,
         minHeight: 22,
         marginRight: 5

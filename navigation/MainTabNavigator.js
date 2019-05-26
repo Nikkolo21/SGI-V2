@@ -8,6 +8,7 @@ import ChangePasswordForm from '../components/Login/ChangePasswordForm';
 import ModalInventory from '../components/common/ModalInventory';
 import ProfileData from '../components/Profile/ProfileData';
 import SimpleQR from '../util/SimpleQR';
+import SimpleCamera from '../util/SimpleCamera';
 
 export const ForgotPasswordStack = createStackNavigator({
   Forgot: ForgotPasswordForm,
@@ -23,6 +24,7 @@ export const AppStack = createStackNavigator({
   Show: ShowInventory,
   Modal: ModalInventory,
   QR: SimpleQR,
+  Camera: SimpleCamera,
   Profile: ProfileData,
 }, { initialRouteKey: 'List', initialRouteName: 'List' });
 
