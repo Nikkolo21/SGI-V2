@@ -48,12 +48,11 @@ export default class ShowInventory extends Component {
     }
 
     render() {
-        const { navigate, state } = this.props.navigation;
+        const { state } = this.props.navigation;
         const { in_list, out_list, choosed, modalVisible, modalType } = this.state;
         let listingInAndOut = choosed === 'entrada' ? in_list : out_list;
         return (
             <ScrollView style={style.mainView}>
-
                 <ModalInventory inventory={state.params} modalType={modalType} modalVisible={modalVisible} modalOpenFn={this.modalOpen} />
 
                 <Text style={style.subtitle}>
@@ -186,28 +185,30 @@ export default class ShowInventory extends Component {
 
 ShowInventory.navigationOptions = props => {
     selectItem = async value => {
-        if (value === 'logout') {
+        if (value === 'Logout') {
             await AsyncStorage.clear();
             props.navigation.navigate('Login');
-        } else if (value === 'profile') {
+        } else if (value === 'Perfil') {
             props.navigation.navigate('Profile');
+        } else if (value === 'QR') {
+            props.navigation.navigate('QR');
         }
     }
     return {
         headerTitle: "Inventarios",
         headerRight: (
-            <View style={{ flexDirection: 'row', width: 150 }}>
-                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightBlue, paddingVertical: 5, width: 70, borderRadius: 3, minHeight: 22, marginRight: 5 }} onPress={() => this.selectItem('profile')}>
-                    <Text style={{ color: 'white' }}>Perfil</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.redButton, paddingVertical: 5, width: 70, borderRadius: 3, minHeight: 22, marginRight: 5 }} onPress={() => this.selectItem('logout')}>
-                    <Text style={{ color: 'white' }}>Logout</Text>
-                </TouchableOpacity>
+            <View style={{ flexDirection: 'row', width: 165 }}>
+                {
+                    [ "QR", "Perfil", "Logout" ].map(elem => 
+                        <TouchableOpacity style={{...style.navBarButtons, backgroundColor: elem === 'Logout' ? colors.redButton : colors.lightBlue}} onPress={() => this.selectItem(elem)}>
+                            <Text style={{ color: 'white' }}>{elem}</Text>
+                        </TouchableOpacity>
+                    )
+                }
             </View>
         ),
     };
 };
-
 
 const style = {
     mainView: {
@@ -251,5 +252,13 @@ const style = {
         flexDirection: 'row',
         paddingBottom: 20
     },
-
+    navBarButtons: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 5,
+        width: 50,
+        borderRadius: 3,
+        minHeight: 22,
+        marginRight: 5
+    }
 }
